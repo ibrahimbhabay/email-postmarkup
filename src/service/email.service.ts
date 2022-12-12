@@ -2,6 +2,7 @@ import {ServerClient} from 'postmark'
 import { MessageDTO } from '../dto/message.dto';
 import { add, browseAllMessages, browseMessagesFromFolder } from '../repository/message.repository'
 import { setupDotenv } from '../config/dotenv.setup';
+import { MessageFolderEnum } from '../utils/folder.enum'
 
 setupDotenv();
 
@@ -18,10 +19,11 @@ export const sendEmail = async (messageData: MessageDTO): Promise<string> => {
 
       if(response.ErrorCode === 0 && response.Message === 'OK') {
         console.log(`Message sent succesfully. Message ID: ${response.MessageID}`)
-        messageData.Folder = messageData?.Folder ? messageData?.Folder : 'sent';
+        messageData.Folder = messageData?.Folder ? messageData?.Folder : MessageFolderEnum.SENT_FOLDER;
         messageData.MessageID = response?.MessageID;
         messageData.MessageStream = process.env.OUTBOUND_MESSAGE_STREAM;
         await add(messageData)
+        console.log(`Message sent and saved ` , messageData)
         return `Message sent successfully.`
       } else {
         return `Message not sent.`
@@ -36,9 +38,10 @@ export const saveInboundEmail = async (data: any): Promise<string> => {
   inboundMessage.To = data?.To;
   inboundMessage.Subject = data?.Subject;
   inboundMessage.TextBody = data?.TextBody;
-  inboundMessage.Folder = 'inbox';
+  inboundMessage.Folder = MessageFolderEnum.INBOX_FOLDER;
   inboundMessage.MessageStream = data?.MessageStream;
   await add(inboundMessage);
+  console.log(`Inbound message recieved and saved ` , inboundMessage)
   return `Inbound message recieved`
 
 }
