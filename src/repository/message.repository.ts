@@ -27,3 +27,15 @@ export const browseMessagesFromFolder = async (folder: string) => {
     }
 
 }
+
+export const browseAllMessages= async () => {
+    try{
+        const messages = await MessageModel.find();
+        return messages;
+    }
+    catch(error){
+        console.log(error)
+        console.log(`Failed to read messages.`)
+    }
+
+}

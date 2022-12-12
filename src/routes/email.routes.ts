@@ -1,6 +1,6 @@
 import {Router, Request, Response} from 'express';
 import { MessageDTO } from 'src/dto/message.dto';
-import { sendEmail, saveInboundEmail, getEmails } from '../service/email.service';
+import { sendEmail, saveInboundEmail, getEmails, getAllEmails } from '../service/email.service';
 
 export const emailRoutes = Router();
 
@@ -12,22 +12,37 @@ emailRoutes.get('/healthcheck', (request: Request, response: Response) => {
 
 emailRoutes.get('/fetch',async (request: Request, response: Response) => {
     const folder = request.query.folder;
-    let emails = await getEmails(folder);
-    response.status(200).send(emails);  
+    if(folder){
+        let emails = await getEmails(folder);
+        response.status(200).json(emails);  
+    }else {
+        response.status(400).send(`Invalid request.`)
+    }
 } )
 
-emailRoutes.post('/send', async (request: Request, response: Response) => {
+emailRoutes.get('/fetch-all',async (request: Request, response: Response) => {
+    let emails = await getAllEmails();
+    response.status(200).json(emails);  
+} )
+
+emailRoutes.post('/send', async (request: Request, response: Response) => { 
     const messageData : MessageDTO = request.body;
-    const status = await sendEmail(messageData);
-    return response.json({
-        status: status
-    })
+    if(messageData){
+        const status = await sendEmail(messageData);
+        return response.status(201).json({
+            status: status
+        })
+    }else {
+        response.status(400).send(`Invalid request.`)
+    }
 } )
 
 emailRoutes.post('/webhooks/inbound', async (request: Request, response: Response) => {
-
     const incomingEmail = request.body;
-    await saveInboundEmail(incomingEmail);
-    return response.status(201).send(`Inbound email recived with messagedID: ${incomingEmail.MessageID}`)
-
+    if(incomingEmail){
+        await saveInboundEmail(incomingEmail);
+        return response.status(201).send(`Inbound email recived with messagedID: ${incomingEmail.MessageID}`)
+    }else {
+        response.status(400).send(`Invalid request.`)
+    }
 } )
