@@ -1,5 +1,8 @@
 import * as dotenv from 'dotenv'
 
 export const setupDotenv = () => {
-    dotenv.config();
+    if(process.env.NODE_ENV !== "production")
+    {
+        dotenv.config();
+    }  
 }
