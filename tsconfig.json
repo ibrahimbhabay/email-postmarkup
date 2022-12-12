@@ -1,6 +1,8 @@
 {
-  "compilerOptions": {                        
-    "target": "es2019",                               
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,                        
+    "target": "es2017",                               
     "module": "commonjs",
     "declaration": true,
     "allowSyntheticDefaultImports": true,
