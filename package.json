@@ -24,6 +24,9 @@
     "url": "https://github.com/ibrahimbhabay/email-postmarkup/issues"
   },
   "homepage": "https://github.com/ibrahimbhabay/email-postmarkup#readme",
+  "engines": {
+    "node": "16.x"
+  },
   "devDependencies": {
     "@types/express": "^4.17.14",
     "@types/node": "^18.11.13"
