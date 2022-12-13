@@ -1,5 +1,5 @@
 import {Router, Request, Response} from 'express';
-import { MessageDTO } from 'src/dto/message.dto';
+import { MessageDTO } from '../dto/message.dto';
 import { sendEmail, saveInboundEmail, getEmails, getAllEmails } from '../service/email.service';
 
 export const emailRoutes = Router();
