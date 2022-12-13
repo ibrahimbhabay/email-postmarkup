@@ -1,4 +1,8 @@
-# email-postmarkup
+# email-postmark
+
+## Deployed service
+- Available at https://email-postmark.herokuapp.com/api/emails
+
 
 ## Instructions to run the service locally
 - install dependencies -> npm i
@@ -8,5 +12,33 @@
 
 
 ## Highlight issues
-- Inbound webhook will not work. Since the postmarkup server does not accept a private ip or hostname for web hooks.
-- please wait till the email service is deployed on the cloud.
+- please use hosted api for webhooks https://email-postmark.herokuapp.com/api/emails
+- On local setup, inbound webhook will not work. Since the postmarkup server does not accept a private ip or hostname for webhooks.
+
+
+## Endpoints
+- Healthcheck
+https://email-postmark.herokuapp.com/api/emails/healthcheck
+
+- Get all emails
+https://email-postmark.herokuapp.com/api/emails/fetch-all
+
+- Get recieved emails
+https://email-postmark.herokuapp.com/api/emails/fetch?folder=inbox
+
+- Get sent emails
+https://email-postmark.herokuapp.com/api/emails/fetch?folder=sent
+
+- Send email
+https://email-postmark.herokuapp.com/api/emails/send
+
+body 
+ {
+  "From": "sender@examplemail.com",
+  "To": "reciever@examplemail.com",
+  "Subject": "Greetings",
+  "TextBody": "Hello,
+}
+
+- Webhook to recieve email
+https://email-postmark.herokuapp.com/api/emails/webhooks/inbound
